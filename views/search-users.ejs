@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Users</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #FFFAE3;
+      font-family: 'Roboto', sans-serif;
+    }
+    .container {
+      margin-top: 50px;
+    }
+    .user-card {
+      padding: 20px;
+      background-color: #fff9e6;
+      border-radius: 10px;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 15px;
+    }
+    .btn-follow {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 5px;
+      font-size: 0.9rem;
+      transition: background-color 0.3s;
+    }
+    .btn-follow:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- displays saerch result of users you are looking for -->
+    <h1>Search Results</h1> 
+    <% if (users.length === 0) { %>
+      <p>No users found.</p>
+    <% } else { %>
+      <% users.forEach(user => { %>
+        <div class="user-card">
+          <p><strong><%= user.username %></strong></p>
+          <form action="/follow-user" method="POST" class="d-inline">
+            <input type="hidden" name="followed_username" value="<%= user.username %>">
+            <button class="btn-follow" type="submit">Follow</button>
+          </form>
+        </div>
+      <% }); %>
+    <% } %>
+    <a href="/" class="btn btn-secondary mt-4">Back to Home</a>
+  </div>
+</body>
+</html>

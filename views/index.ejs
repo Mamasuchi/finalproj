@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quote Dreams</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;500&family=Roboto:wght@300;500&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #F7F8FA; 
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .navbar {
+      background: linear-gradient(135deg, #4A90E2, #333333); 
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .navbar-brand, .nav-link {
+      color: #fff !important;
+      font-weight: 500;
+    }
+
+    .navbar-nav .nav-item .nav-link {
+      margin-right: 15px;
+      transition: color 0.3s ease;
+    }
+
+    .navbar-nav .nav-item .nav-link:hover {
+      color: #00B8A9 !important; 
+    }
+
+    .navbar-toggler-icon {
+      filter: brightness(0) invert(1);
+    }
+
+    .quote-container {
+      background: linear-gradient(135deg, #00B8A9, #2F3A3F); 
+      color: #fff; 
+      padding: 50px;
+      border-radius: 15px;
+      box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      margin-top: 50px;
+      font-family: 'Quicksand', sans-serif;
+      transition: transform 0.3s ease;
+    }
+
+    .quote-container:hover {
+      transform: translateY(-5px); 
+    }
+
+    
+    #quote {
+      font-family: 'Playfair Display', serif; 
+      font-size: 2rem;
+      font-weight: 700;
+      color: #FFF; 
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .btn-custom {
+      background-color: #4A90E2; 
+      color: #fff;
+      padding: 12px 30px;
+      border: none;
+      font-size: 1.1rem;
+      border-radius: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-custom:hover {
+      background-color: #0077B5; 
+    }
+
+    .btn-favorite {
+      background-color: #333333; 
+      color: #fff;
+      padding: 12px 30px;
+      border: none;
+      font-size: 1.1rem;
+      border-radius: 30px;
+      margin-left: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-favorite:hover {
+      background-color: #2F3A3F; 
+    }
+
+    .add-quote-form {
+      background: #E6F7F7; 
+      padding: 30px;
+      margin-top: 50px;
+      border-radius: 15px;
+      box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-label {
+      font-weight: bold;
+      color: #333333; 
+    }
+
+    footer {
+      background: #333333; 
+      color: #fff;
+      text-align: center;
+      padding: 30px 0;
+      margin-top: 50px;
+      font-weight: 500;
+    }
+
+    .footer-link {
+      color: #fff;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .footer-link:hover {
+      color: #00B8A9; 
+    }
+
+    .form-control {
+      border-radius: 10px;
+      border: 1px solid #ddd;
+    }
+
+    .form-control:focus {
+      border-color: #4A90E2; 
+      box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
+    }
+
+    .container {
+      max-width: 960px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="/">Quote Dreams</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <% if (loggedIn) { %>
+            <li class="nav-item">
+              <a class="nav-link" href="/your-quotes">Your Quotes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/your-following">Following: <%= followingCount %></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/dashboard">Favorites</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/logout">Logout</a>
+            </li>
+          <% } else { %>
+            <li class="nav-item">
+              <a class="nav-link" href="/register">Register</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/login">Login</a>
+            </li>
+          <% } %>
+          <li class="nav-item">
+            <a class="nav-link" href="/list-of-quotes">Quotes</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Search Bar -->
+  <div class="container mt-4">
+    <form action="/search-users" method="GET" class="d-flex">
+      <input type="text" name="query" class="form-control me-2" placeholder="Search for users" required>
+      <button class="btn btn-custom" type="submit">Search</button>
+    </form>
+  </div>
+
+  <!-- Quote Section -->
+  <div class="container">
+    <div class="quote-container">
+      <p id="quote">"The only way to do great work is to love what you do." - Steve Jobs</p>
+      <button class="btn-custom" id="new-quote-button">Get Another Quote</button>
+      <% if (loggedIn) { %>
+        <form action="/favorite-quote" method="POST" style="display: inline;">
+          <input type="hidden" name="quote" id="favorite-quote">
+          <input type="hidden" name="author" id="favorite-author">
+          <button type="submit" class="btn-favorite">Favorite This Quote</button>
+        </form>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- Add Quote Form -->
+  <% if (loggedIn) { %>
+    <div class="container">
+      <div class="add-quote-form">
+        <h3 class="text-center">Add Your Own Quote</h3>
+        <form action="/add-quote" method="POST">
+          <div class="mb-3">
+            <label for="quote-body" class="form-label">Quote:</label>
+            <textarea class="form-control" id="quote-body" name="quote" rows="3" required></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="quote-author" class="form-label">Author:</label>
+            <input type="text" class="form-control" id="quote-author" name="author" required>
+          </div>
+          <button type="submit" class="btn-custom w-100">Add Quote</button>
+        </form>
+      </div>
+    </div>
+  <% } %>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2024 Jose Activities. Made with ❤️</p>
+  </footer>
+
+  <!-- JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.getElementById('new-quote-button').addEventListener('click', async function() {
+      try {
+        const response = await fetch('/quote-of-the-day');
+        const data = await response.json();
+        if (data.body && data.author) {
+          document.getElementById('quote').textContent = `"${data.body}" - ${data.author}`;
+          document.getElementById('favorite-quote').value = data.body;
+          document.getElementById('favorite-author').value = data.author;
+        } else {
+          document.getElementById('quote').textContent = "Sorry, couldn't fetch a new quote.";
+        }
+      } catch (error) {
+        console.error('Error fetching the quote:', error);
+      }
+    });
+  </script>
+</body>
+</html>
